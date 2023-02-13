@@ -21,7 +21,14 @@ http://localhost:8081/v1/currencies
 http://localhost:8081/v1/currencies/{code}
 ```
 ## Requisitos
+- Tener libres los puertos 8080 y 8081
 - Java 17
+- Maven 
+- Compilar proyecto, para la generación de las clases de openapi
+```bash
+mvn clean install
+
+```
 
 - BD postgresql configurada en el application.properties 
 ```properties
@@ -34,5 +41,5 @@ spring.datasource.password= postgrespw
 ## Ejecución
 
 ```bash
-java -jar exercise-0.0.1-SNAPSHOT.jar
+java -jar target/exercise-0.0.1-SNAPSHOT.jar
 ```
