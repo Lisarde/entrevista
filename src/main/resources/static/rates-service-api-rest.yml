@@ -1,0 +1,186 @@
+openapi: 3.0.3
+info:
+  title: Rates Api
+  description: Handle the info about Rates in platform
+  version: "1.0"
+tags:
+- name: rates
+  description: Available operations for rates.
+paths:
+  /v1/rates/create:
+    post:
+      tags:
+      - rates
+      summary: Create rate
+      operationId: createRate
+      requestBody:
+        description: The Rate object to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatePost'
+      responses:
+        201:
+          description: created
+        401:
+          description: Authentication is required to get the requested response
+  /v1/rates/get/{id}:
+    get:
+      tags:
+      - rates
+      summary: Get rate detail
+      operationId: getRateById
+      parameters:
+        - in: path
+          description: The rate ID code
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rate'
+        401:
+          description: Authentication is required to get the requested response
+        404:
+          description: Rate not found
+  /v1/rates/delete/{id}:
+    delete:
+      tags:
+      - rates
+      summary: Delete rate
+      operationId: deleteRateById
+      parameters:
+        - in: path
+          description: The rate ID code
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successful operation
+        401:
+          description: Authentication is required to get the requested response
+        404:
+          description: Rate not found
+  /v1/rates/search:
+    get:
+      tags:
+      - rates
+      summary: Search rate
+      operationId: searchRate
+      parameters:
+        - in: query
+          name: query params
+          schema:
+            $ref: '#/components/schemas/RateSearch'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rate'
+        400:
+          description: Param (brandId, productId and startDate or endDate) required or bad data dormatter (yyyy-MM-dd)
+        401:
+          description: Authentication is required to get the requested response
+        404:
+          description: Rate not found
+components:
+  schemas:
+    Rate:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        brandId:
+          type: integer
+          example: 1
+        productId:
+          type: integer
+          example: 1
+        startDate:
+          type: date
+          example: "2022-01-01"
+        endDate:
+          type: date
+          example: "2022-01-31"
+        price:
+          type: string
+          example: "15.50 $"
+        currencyCode:
+          type: string
+          example: "USD"
+      required:
+        - id
+        - brandId
+        - productId
+        - startDate
+        - endDate
+        - price
+        - currencyCode
+    RatePost:
+      type: object
+      properties:
+        brandId:
+          type: integer
+          example: 1
+        productId:
+          type: integer
+          example: 1
+        startDate:
+          type: date
+          example: "2022-01-01"
+        endDate:
+          type: date
+          example: "2022-01-31"
+        price:
+          type: integer
+          example: 1550
+        currencyCode:
+          type: string
+          example: "USD"
+      required:
+        - brandId
+        - productId
+        - startDate
+        - endDate
+        - price
+        - currencyCode
+    RateSearch:
+      type: object
+      properties:
+        brandId:
+          type: integer
+          example: 1
+        productId:
+          type: integer
+          example: 1
+      required:
+        - brandId
+        - productId
+      anyOf:
+        - properties:
+            startDate:
+              type: string
+              example: "2022-01-01"
+          required: [startDate]
+        - properties:
+            endDate:
+              type: string
+              example: "2022-05-31"
+          required: [endDate]
+  securitySchemes:
+    basicAuth: 
+      type: http
+      scheme: basic
+security:
+  - basicAuth: []
